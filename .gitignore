@@ -1,0 +1,24 @@
+# 卫星目录:Luke 提供的原始代码,只作参考 / 备份,不入库、不改动
+_satellites/
+
+# 原始资料 / 压缩包(Luke 提供的代码包,按需整合,不入库)
+*.zip
+*.7z
+*.rar
+*.tar.gz
+
+# 构建产物
+build/
+dist/
+
+# IDE / 系统
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
