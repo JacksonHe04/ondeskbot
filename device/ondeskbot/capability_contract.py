@@ -52,8 +52,6 @@ def parameters(name):
                                               default=config.LONG_PRESS_HOLD_MS, unit="ms")
     elif name == "motion.swipe":
         properties, required = {"direction": field("string", enum=["up", "down", "left", "right"])}, ["direction"]
-    elif name == "motion.system_gesture":
-        properties, required = {"gesture": field("string", enum=["home", "back"])}, ["gesture"]
     elif name == "motion.raw_move":
         properties = {"x_steps": field("integer", minimum=0, maximum=config.RAW_MOVE_MAX_X_STEPS, unit="step"),
                       "y_steps": field("integer", minimum=0, maximum=config.RAW_MOVE_MAX_Y_STEPS, unit="step")}

@@ -220,21 +220,6 @@ class MotionController:
             "driver": result,
         }, recovered)
 
-    def system_gesture(self, args):
-        gesture = str(args.get("gesture", "")).lower()
-        if gesture == "home":
-            start, end = (0.50, 0.95), (0.50, 0.30)
-        elif gesture == "back":
-            start, end = (0.02, 0.50), (0.25, 0.50)
-        else:
-            raise DeviceError(INVALID_ARGUMENT, "gesture 必须是 home 或 back")
-        msx, msy = self.calibration.screen_to_motor(*start)
-        mex, mey = self.calibration.screen_to_motor(*end)
-        recovered = self._ensure_homed()
-        result = self._motion("系统手势", lambda: self.driver.drag(msx, msy, mex, mey))
-        return self._with_recovery(
-            {"gesture": gesture, "driver": result}, recovered)
-
     def raw_move(self, args):
         try:
             x_steps = int(args.get("x_steps"))
