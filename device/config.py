@@ -175,7 +175,11 @@ UART_TX_PIN = 1
 UART_RX_PIN = 2
 UART_BAUD = 115200
 UART_TIMEOUT_MS = 3000
-Z_CLICK_HOLD_MS = 250
+# 普通点击的笔尖保持时间。261017 真机实测：250ms 时点桌面图标会被系统判成长按
+# （弹出快捷方式菜单），而双击的 60ms 间隔能被正常识别——说明瓶颈在单次按住时长。
+# 降到 100ms：仍远高于触摸识别下限（约 40ms），又明显低于安卓长按阈值（约 400ms），
+# 同时给机械 Z 轴下压/抬起留出余量。若现场发现点击偶发不生效，按 20ms 步长回调。
+Z_CLICK_HOLD_MS = 100
 Z_DOUBLE_TAP_HOLD_MS = 60
 LONG_PRESS_HOLD_MS = 3000
 RAW_MOVE_MAX_X_STEPS = 3982
