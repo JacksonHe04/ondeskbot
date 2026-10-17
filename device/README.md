@@ -26,6 +26,9 @@ ESP32-S3 设备端的核心代码,负责在真实手机屏幕上完成物理交�
   - `transport/` — 可替换的云端通信接口与其内存实现
   - `storage.py` / `redact.py` — 原子 JSON 持久化、凭据字段屏蔽
   - `tls.py` / `diag.py` — 严格 TLS 包装、串口诊断行
+  - `serial_link.py` / `nvs.py` — 串口接入协议、NVS blob 读写
+  - `reliability.py` — 有界命令日志与归档发送箱
+  - `transport/mqtt_wire.py` — MQTT 3.1.1 报文层
   - 其余为动作层依赖的日志、错误与兼容模块
 
 ## 说明
