@@ -51,3 +51,17 @@ def hexlify(value, sep=None):
     """bytes → 十六进制字符串；`sep` 可选，用于 MAC 这类需要分隔的展示。"""
     raw = binascii.hexlify(value) if sep is None else binascii.hexlify(value, sep)
     return raw.decode("ascii") if isinstance(raw, bytes) else str(raw)
+
+
+def sock_read(connection, size):
+    """从 socket / SSL 对象读；MicroPython 用 read()，CPython 用 recv()。"""
+    if hasattr(connection, "read"):
+        return connection.read(size)
+    return connection.recv(size)
+
+
+def sock_write(connection, data):
+    """向 socket / SSL 对象写；MicroPython 用 write()，CPython 用 send()。"""
+    if hasattr(connection, "write"):
+        return connection.write(data)
+    return connection.send(data)

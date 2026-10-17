@@ -4,7 +4,7 @@
 """
 import socket
 import config
-from ..compat import ticks_ms, ticks_diff, sleep_ms
+from ..compat import sleep_ms, sock_read, sock_write, ticks_diff, ticks_ms
 from ..errors import DeviceError
 from ..tls import wrap_socket
 
@@ -53,7 +53,7 @@ class MqttClient:
         while sent < len(data):
             if ticks_diff(ticks_ms(), start) > config.MQTT_IO_TIMEOUT_S * 1000:
                 raise OSError("MQTT write timeout")
-            count = self.sock.write(data[sent:]) if hasattr(self.sock, "write") else self.sock.send(data[sent:])
+            count = sock_write(self.sock, data[sent:])
             if not count:
                 raise OSError("MQTT closed while writing")
             sent += count
@@ -138,7 +138,7 @@ class MqttClient:
         self.sock.setblocking(False)
         try:
             try:
-                chunk = self.sock.read(2048) if hasattr(self.sock, "read") else self.sock.recv(2048)
+                chunk = sock_read(self.sock, 2048)
             except OSError as error:
                 if error.args and error.args[0] in (11, 35, 110, 2):
                     chunk = None
