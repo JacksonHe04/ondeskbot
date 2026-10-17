@@ -23,6 +23,9 @@ ESP32-S3 设备端的核心代码,负责在真实手机屏幕上完成物理交�
   - `runtime_state.py` — 任务 / 暂停 / 取消 / 维护会话的状态机
   - `protocol.py` — 命令校验与响应封装
   - `security.py` / `clock.py` — 摘要与随机标识、可信设备时间
+  - `transport/` — 可替换的云端通信接口与其内存实现
+  - `storage.py` / `redact.py` — 原子 JSON 持久化、凭据字段屏蔽
+  - `tls.py` / `diag.py` — 严格 TLS 包装、串口诊断行
   - 其余为动作层依赖的日志、错误与兼容模块
 
 ## 说明
