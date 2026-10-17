@@ -15,11 +15,16 @@ ESP32-S3 设备端的核心代码,负责在真实手机屏幕上完成物理交�
 - `drivers/`
   - `arduino_serial.py` — 与下位机(Arduino + CNC Shield)的 UART 协议:`MoveClick` / `Drag` / `ZClick` / `Home` 等
   - `camera_manager.py` — OV5640 摄像头驱动
+  - `wifi_manager.py` / `wifi_ap.py` / `wifi_status.py` — WiFi 连接与凭据存储、配网热点、状态码说明
 - `ondeskbot/`
   - `motion.py` — 上层动作:点击 / 双击 / 长按 / 滑动 / 系统手势,含未归零自动恢复
   - `coordinate_transform.py` — 屏幕比例坐标 ↔ 机械步数坐标
+  - `capabilities.py` / `capability_contract.py` — 能力注册表与云端能力目录契约
+  - `runtime_state.py` — 任务 / 暂停 / 取消 / 维护会话的状态机
+  - `protocol.py` — 命令校验与响应封装
+  - `security.py` / `clock.py` — 摘要与随机标识、可信设备时间
   - 其余为动作层依赖的日志、错误与兼容模块
 
 ## 说明
 
-本目录是从完整设备服务中摘出的**核心模块**,用于说明设备侧能力;串口接入协议、摄像头调参、云端注册等完整实现未包含在此。
+本目录是设备服务的**核心模块**,用于说明设备侧能力;串口接入协议、摄像头调参、云端注册等实现未包含在此。

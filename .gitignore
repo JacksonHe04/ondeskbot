@@ -5,6 +5,9 @@ _satellites/
 CLAUDE.md
 AGENTS.md
 
+# Agent 工作目录:含本地笔记与素材,不入库
+.agents/
+
 # 原始资料 / 压缩包(按需整合,不入库)
 *.zip
 *.7z
