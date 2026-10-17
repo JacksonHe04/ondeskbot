@@ -90,7 +90,7 @@ def safe_camera_settings():
 def diagnostic_camera_settings():
     """「诊断档」：拍诊断/基线照片时用的**固定一组值**，与当前正式档无关。
 
-    为什么需要（wings 群 seq 122 服务端提、设备侧实现）：
+    为什么需要（服务端提出、设备侧实现）：
 
     调试页「原生拍摄」原先先落到 `safe_camera_settings()`（`sharpness 3 / quality 20 /
     自动曝光 / 自动增益`）—— 那是**调参页的推荐起点**，不是一个能判读的档：
