@@ -29,6 +29,8 @@ ESP32-S3 设备端的核心代码,负责在真实手机屏幕上完成物理交�
   - `serial_link.py` / `nvs.py` — 串口接入协议、NVS blob 读写
   - `reliability.py` — 有界命令日志与归档发送箱
   - `transport/mqtt_wire.py` — MQTT 3.1.1 报文层
+  - `identity.py` — 芯片身份、云端身份与注册信息持久化
+  - `provisioning.py` — 本地配网门户（热点、页面与 captive DNS）
   - 其余为动作层依赖的日志、错误与兼容模块
 
 ## 说明
