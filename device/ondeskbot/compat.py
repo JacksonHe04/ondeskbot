@@ -47,8 +47,7 @@ def epoch_ms():
     return int((time.time() + offset) * 1000)
 
 
-def hexlify(value):
-    try:
-        return binascii.hexlify(value).decode("ascii")
-    except TypeError:  # 某些 MicroPython 端返回 str
-        return str(binascii.hexlify(value))
+def hexlify(value, sep=None):
+    """bytes → 十六进制字符串；`sep` 可选，用于 MAC 这类需要分隔的展示。"""
+    raw = binascii.hexlify(value) if sep is None else binascii.hexlify(value, sep)
+    return raw.decode("ascii") if isinstance(raw, bytes) else str(raw)
