@@ -32,6 +32,7 @@ ESP32-S3 设备端的核心代码,负责在真实手机屏幕上完成物理交�
   - `identity.py` — 芯片身份、云端身份与注册信息持久化
   - `provisioning.py` — 本地配网门户（热点、页面与 captive DNS）
   - `http_client.py` — 轻量 HTTP 客户端（可选连接复用）
+  - `calibration.py` — 屏幕 ROI、camera-arm 与手机毫米边界标定存储
   - `led.py` / `buttons.py` / `periodic.py` — 状态灯、按键采集与共用的周期定时器
   - 其余为动作层依赖的日志、错误与兼容模块
 

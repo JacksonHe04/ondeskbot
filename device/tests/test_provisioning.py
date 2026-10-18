@@ -8,6 +8,7 @@ import config as _config
 
 from ondeskbot.provisioning import (_html, _redirect, dns_reply,
                                     PORTAL_CLIENT_TIMEOUT_S, ProvisioningPortal)
+from tests.fakes import FakeAp, FakeButtons, FakeWifi
 
 
 def _query(name, qtype=1, qclass=1, qr=0, qdcount=1):
@@ -86,49 +87,6 @@ class CaptivePortalTests(unittest.TestCase):
 
 # ---------- 配网流程端到端 ----------
 
-class _FakeWifi:
-    """STA 侧：扫描与凭据落盘。"""
-
-    def __init__(self):
-        self.saved = None
-
-    def scan_networks(self):
-        return [{"ssid": "AP1", "rssi": -40}]
-
-    def save_credentials(self, ssid, password):
-        self.saved = (ssid, password)
-
-
-class _FakeAp:
-    """AP 侧：热点生命周期。"""
-
-    def __init__(self):
-        self.started = 0
-        self.stopped = 0
-
-    def start_ap(self):
-        self.started += 1
-        return True
-
-    def stop_ap(self):
-        self.stopped += 1
-
-    def get_ap_ip(self):
-        return "192.168.4.1"
-
-
-class _FakeButtons:
-    def __init__(self):
-        self.events = []
-
-    def poll(self):
-        pass
-
-    def consume(self):
-        out, self.events = self.events, []
-        return out
-
-
 def _free_port():
     s = _socket.socket()
     s.bind(("127.0.0.1", 0))
@@ -168,9 +126,9 @@ class ProvisioningFlowTests(unittest.TestCase):
         self._orig_port = _config.WIFI_AP_WEB_PORT
         self.port = _free_port()
         _config.WIFI_AP_WEB_PORT = self.port
-        self.wifi = _FakeWifi()
-        self.ap = _FakeAp()
-        self.buttons = _FakeButtons()
+        self.wifi = FakeWifi()
+        self.ap = FakeAp()
+        self.buttons = FakeButtons()
         self.portal = ProvisioningPortal(self.wifi, self.ap, self.buttons)
 
     def tearDown(self):
@@ -190,7 +148,7 @@ class ProvisioningFlowTests(unittest.TestCase):
         _start_portal(self.portal)
         self.assertIn("Wi-Fi 配网",
                       _request(self.port, "GET", "/").decode("utf-8", "ignore"))
-        self.assertIn("AP1",
+        self.assertIn("test-wifi",
                       _request(self.port, "GET", "/api/networks").decode("utf-8", "ignore"))
         self.assertIn("pending",
                       _request(self.port, "GET", "/api/status").decode("utf-8", "ignore"))
@@ -201,7 +159,7 @@ class ProvisioningFlowTests(unittest.TestCase):
         raw = _request(self.port, "POST", "/api/config",
                        {"ssid": "AP1", "password": "pw"}).decode()
         self.assertIn("202", raw.split("\r\n")[0])
-        self.assertIsNone(self.wifi.saved)              # 未按 BTN3 ⇒ 不写凭据
+        self.assertIsNone(self.wifi.credentials)              # 未按 BTN3 ⇒ 不写凭据
         self.assertEqual(self.portal.pending["ssid"], "AP1")
 
     def test_btn3_confirm_saves_and_exits(self):
@@ -209,10 +167,10 @@ class ProvisioningFlowTests(unittest.TestCase):
         _request(self.port, "POST", "/api/config", {"ssid": "AP1", "password": "pw"})
         self.buttons.events.append("confirm")
         for _ in range(40):                              # 等主循环取到按键事件
-            if self.wifi.saved:
+            if self.wifi.credentials:
                 break
             time.sleep(0.1)
-        self.assertEqual(self.wifi.saved, ("AP1", "pw"))
+        self.assertEqual(self.wifi.credentials, ("AP1", "pw"))
         self.assertTrue(self.portal.confirmed)
 
     def test_hung_client_does_not_freeze_portal(self):
@@ -225,7 +183,7 @@ class ProvisioningFlowTests(unittest.TestCase):
                        timeout=PORTAL_CLIENT_TIMEOUT_S + 4).decode()
         elapsed = time.time() - start
         hung.close()
-        self.assertIn("AP1", raw)
+        self.assertIn("test-wifi", raw)
         self.assertLess(elapsed, PORTAL_CLIENT_TIMEOUT_S + 4,
                         "门户被僵死连接卡住了 %.1fs" % elapsed)
 
