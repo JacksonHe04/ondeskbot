@@ -34,6 +34,8 @@ ESP32-S3 设备端的核心代码,负责在真实手机屏幕上完成物理交�
   - `http_client.py` — 轻量 HTTP 客户端（可选连接复用）
   - `calibration.py` — 屏幕 ROI、camera-arm 与手机毫米边界标定存储
   - `camera_service.py` / `camera_sessions.py` — 拍照与参数读写、云端编排的标定 / 调参会话
+  - `registration.py` / `command_processor.py` — 云端注册适配器、命令校验与去重
+  - `factory_reset.py` / `migration.py` — 白名单式恢复出厂、1.x 遗留配置迁移
   - `led.py` / `buttons.py` / `periodic.py` — 状态灯、按键采集与共用的周期定时器
   - 其余为动作层依赖的日志、错误与兼容模块
 
